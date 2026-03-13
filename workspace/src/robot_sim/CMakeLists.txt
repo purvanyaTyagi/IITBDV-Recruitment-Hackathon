@@ -11,10 +11,35 @@ find_package(rclcpp REQUIRED)
 find_package(robot_state_publisher REQUIRED)
 find_package(ros2_control REQUIRED)
 find_package(xacro REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
-install(
-  DIRECTORY launch urdf config
+include_directories(include)
+
+add_executable(driver src/main.cpp src/trajectory.cpp) 
+
+ament_target_dependencies(driver
+  rclcpp
+  tf2
+  tf2_ros
+  geometry_msgs
+)
+
+install(TARGETS
+  driver
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(DIRECTORY
+  launch
+  urdf
+  rviz
   DESTINATION share/${PROJECT_NAME}
+)
+
+install(DIRECTORY include/
+  DESTINATION include/
 )
 
 if(BUILD_TESTING)

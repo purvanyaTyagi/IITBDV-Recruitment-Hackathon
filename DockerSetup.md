@@ -1,66 +1,17 @@
-# Gazebo Ignition Setup Guide
+# Simulation Environment Setup Guide
 
 ## Table of Contents
-1. [What is Gazebo Ignition?](#what-is-gazebo-ignition)
-2. [Prerequisites](#prerequisites)
-3. [Windows Setup](#windows-setup)
-4. [Linux Setup](#linux-setup)
-5. [Running Gazebo Ignition](#running-gazebo-ignition)
-6. [Troubleshooting](#troubleshooting)
-
----
-
-## What is Gazebo Ignition?
-
-### Overview
-
-**Gazebo Ignition** (now known as Gazebo) is a powerful, open-source 3D robotics simulator that enables engineers and researchers to design, test, and validate robotic systems in a virtual environment before deploying them to real hardware. It is the next-generation successor to the widely-used Gazebo Classic simulator.
-
-### Key Characteristics
-
-Gazebo Ignition is designed with the following core features:
-
-- **High-Fidelity Physics Simulation**: Provides accurate physics-based simulation using ODE (Open Dynamics Engine) and other physics engines, allowing realistic interaction between robots and their environments.
-
-- **Real-Time Performance**: Optimized for real-time simulation, enabling roboticists to run tests at or near actual hardware speeds.
-
-- **Modular Architecture**: Built on a component-based plugin system, allowing users to extend functionality through custom plugins without modifying core code.
-
-- **Multi-Robot Support**: Simulate multiple robots operating in the same environment, making it ideal for multi-agent and swarm robotics research.
-
-- **Sensor Simulation**: Accurately simulates various sensors including:
-  - Camera/RGB-D sensors
-  - LiDAR (Light Detection and Ranging)
-  - IMU (Inertial Measurement Unit)
-  - Ultrasonic sensors
-  - Force/Torque sensors
-
-- **Customizable Environments**: Supports creation of complex 3D environments, terrain, and obstacles, with physics-based interactions.
-
-- **Cross-Platform Support**: Available on Linux, macOS, and Windows (via containerization), making it accessible to roboticists regardless of their operating system.
-
-### Why Use Gazebo Ignition?
-
-Gazebo Ignition bridges the gap between simulation and reality (sim-to-real transfer) by providing a realistic sandbox for:
-- Testing autonomous navigation algorithms
-- Validating control systems
-- Prototyping robotic manipulators and mobile robots
-- Conducting swarm robotics experiments
-- Developing and debugging ROS 2 applications
-- Educational purposes in robotics courses
----
+1. [Prerequisites](#prerequisites)
+2. [Windows Setup](#windows-setup)
+3. [Linux Setup](#linux-setup)
+4. [Running Gazebo Ignition](#running-gazebo-ignition)
+5. [Troubleshooting](#troubleshooting)
 
 ## Prerequisites
 
 ### What is Docker?
 
 **Docker** is a containerization platform that packages applications and all their dependencies into isolated, portable containers. Think of it as a lightweight virtual machine that ensures software runs identically across any system—whether it's Windows, Linux, or macOS.
-
-**Why Docker for Gazebo Ignition?**
-- Ensures consistent environment across different machines
-- Eliminates "works on my machine" problems
-- Simplifies dependency management (no manual installation of complex libraries)
-- Provides an isolated sandbox for experimentation
 
 **Note**: You don't need to understand Docker in detail to follow this guide. Simply treat it as a tool that makes Gazebo Ignition work seamlessly on your system.
 
@@ -211,13 +162,13 @@ wsl
 
 Inside your WSL environment, create a directory for your project:
 ```bash
-mkdir ~/gazebo-workspace
-cd ~/gazebo-workspace
+mkdir ~/workspace
+cd ~/workspace
 ```
 
 #### 6.2 Clone the Repository
 
-Clone the Gazebo Ignition Docker repository:
+Clone the Docker repository:
 ```bash
 git clone https://github.com/purvanyaTyagi/Simulation-Development-Recruitment-Hackathon .
 ```
@@ -277,15 +228,6 @@ ign gazebo
 ```
 
 **Gazebo Ignition should now launch on your screen!** You'll see the 3D simulator window with an empty environment ready for use.
-
-### Step 8: Using Gazebo Ignition
-
-Once Gazebo Ignition is open, you can:
-
-- **Insert Models**: Right-click in the environment to insert pre-loaded robot models
-- **Create Worlds**: Design custom environments with terrain and obstacles
-- **Run Simulations**: Click the play button to start the physics simulation
-- **Load ROS 2 Plugins**: Control robots using ROS 2 commands from another terminal
 
 ---
 

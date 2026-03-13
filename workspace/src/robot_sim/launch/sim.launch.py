@@ -1,36 +1,42 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import ExecuteProcess
 import os
+from launch_ros.parameter_descriptions import ParameterValue
+from launch.substitutions import Command
+
+
+from ament_index_python.packages import get_package_share_directory
+
 
 def generate_launch_description():
 
-    urdf = os.path.join(
-        os.getenv("HOME"),
-        "workspace/src/robot_sim/urdf/robot.urdf"
+    pkg = get_package_share_directory('robot_sim')
+    urdf = os.path.join(pkg, 'urdf', 'robot.urdf')
+    rviz = os.path.join(pkg, 'rviz', 'config.rviz')
+
+    robot_description = ParameterValue(
+    Command(['cat ', urdf]),
+    value_type=str
     )
 
     return LaunchDescription([
 
-        ExecuteProcess(
-            cmd=["ign", "gazebo", "empty.sdf"],
+        Node(
+            package="robot_state_publisher",
+            executable="robot_state_publisher",
+            parameters=[{'robot_description': robot_description}]
+        ),
+
+        Node(
+            package="robot_sim",
+            executable="driver",
             output="screen"
         ),
 
         Node(
-            package="robot_state_publisher",
-            executable="robot_state_publisher",
-            parameters=[{'robot_description': open(urdf).read()}]
-        ),
-
-        Node(
-            package="ros_gz_sim",
-            executable="create",
-            arguments=[
-                "-file", urdf,
-                "-name", "diffbot",
-                "-z", "1"
-            ],
+            package="rviz2",
+            executable="rviz2",
+            arguments=['-d', rviz],
             output="screen"
         )
     ])
