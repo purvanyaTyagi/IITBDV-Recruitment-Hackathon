@@ -161,25 +161,32 @@ class Solution(Bot):
         self._assoc       = np.array([], dtype=int)
 
     # ------------------------------------------------------------------
-    def data_association(self, measurements, current_map):
-        """
-        Nearest-Neighbour data association.
-        Steps:
-          1. Transform local measurements → world frame using current pose.
-          2. For each measurement find the nearest cone in *current_map*.
-        Returns an int array of indices into current_map.
-        """
-        if len(measurements) == 0 or len(current_map) == 0:
-            self._global_meas = np.zeros((0, 2))
-            self._assoc       = np.array([], dtype=int)
-            return self._assoc
+   def data_association(self, measurements, current_map):
 
-        gm = local_to_global(measurements, self.pos, self.heading)
-        self._global_meas = gm
-
-        D           = distance.cdist(gm, current_map)
-        self._assoc = np.argmin(D, axis=1)
+    if len(measurements) == 0 or len(current_map) == 0:
+        self._global_meas = np.zeros((0, 2))
+        self._assoc = np.array([], dtype=int)
         return self._assoc
+
+    gm = local_to_global(measurements, self.pos, self.heading)
+    self._global_meas = gm
+
+    D = distance.cdist(gm, current_map)
+
+    assoc = []
+    GATE_THRESHOLD = 3.0
+
+    for i in range(len(gm)):
+        nearest = np.argmin(D[i])
+        dist = D[i, nearest]
+
+        if dist < GATE_THRESHOLD:
+            assoc.append(nearest)
+        else:
+            assoc.append(-1)
+
+    self._assoc = np.array(assoc)
+    return self._assoc
 
 # ── Problem 1 – Data Association ──────────────────────────────────────────────
 def make_problem1():
