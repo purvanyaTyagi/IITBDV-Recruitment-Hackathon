@@ -149,19 +149,26 @@ class Solution(Bot):
         self._assoc       = np.array([], dtype=int)
 
     # ------------------------------------------------------------------
-    def localization(self, velocity, steering):
-        """
-        Bicycle kinematic model (dead reckoning):
-            ẋ = v·cos(ψ)
-            ẏ = v·sin(ψ)
-            ψ̇ = (v / L)·tan(δ)
-        """
-        self.pos[0]  += velocity * np.cos(self.heading) * DT
-        self.pos[1]  += velocity * np.sin(self.heading) * DT
-        self.heading  = angle_wrap(
-            self.heading + (velocity / WHEELBASE) * np.tan(steering) * DT
-        )
+  def localization(self, velocity, steering):
+    """
+    Improved localization using midpoint integration of the bicycle model.
+    This reduces numerical error and produces a smoother trajectory.
+    """
 
+    # compute heading rate
+    heading_rate = (velocity / WHEELBASE) * np.tan(steering)
+
+    # predict new heading
+    new_heading = angle_wrap(self.heading + heading_rate * DT)
+
+    # use midpoint heading for position update
+    avg_heading = angle_wrap((self.heading + new_heading) / 2.0)
+
+    self.pos[0] += velocity * np.cos(avg_heading) * DT
+    self.pos[1] += velocity * np.sin(avg_heading) * DT
+
+    # update heading
+    self.heading = new_heading
 
 # ── Problem 2 – Localization ───────────────────────────────────────────────────
 def make_problem2():
