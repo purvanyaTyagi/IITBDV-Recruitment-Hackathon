@@ -161,7 +161,7 @@ class Solution(Bot):
         self._assoc       = np.array([], dtype=int)
 
     # ------------------------------------------------------------------
-    def data_association(self, measurements, current_map):
+    def data_association(self, measurements, current_map): #XXX
         """
         Nearest-Neighbour data association.
         Steps:
