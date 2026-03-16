@@ -4,19 +4,37 @@
 // THIS FUNCTION RUNS EVERY 50ms AFTER THE SIMULATION IS STARTED
 void RobotDrive::update_pose()
 {
-    t += 0.05;
+   static double x = 0.0;
+static double y = 0.0;
+static double vx = 0.0;
+static double vy = 0.0;
 
-    double a = 2.0;
+double dt = 0.05;   // timestep (50 ms)
 
-    // infinity trajectory
-    double x = a * sin(t);
-    double y = a * sin(t) * cos(t);
+// robot parameters
+double mass = 5.0;
+double force = 10.0;
 
-    // velocity for heading
-    double dx = a * cos(t);
-    double dy = a * cos(2*t);
+// acceleration from F = ma
+double ax = force / mass;
+double ay = 0.0;
 
-    double yaw = atan2(dy, dx);
+// update velocity
+vx += ax * dt;
+vy += ay * dt;
 
-    setPose(x, y, yaw); // USE THIS FUNCTION TO UPDATE THE POSE OF YOUR ROBOT.
+// simple friction
+double friction = 0.98;
+vx *= friction;
+vy *= friction;
+
+// update position
+x += vx * dt;
+y += vy * dt;
+
+// compute heading
+double yaw = atan2(vy, vx);
+
+// send pose to RViz
+setPose(x, y, yaw);
 }
