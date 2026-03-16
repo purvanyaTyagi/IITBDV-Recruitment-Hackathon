@@ -13,34 +13,39 @@ You must implement two functions: plan() and control()
 # ─── PLANNER ──────────────────────────────────────────────────────────────────
 import numpy as np
 
+
+'''
+PPC Hackathon — Participant Boilerplate
+You must implement two functions: plan() and control()
+'''
+
+# ─── TYPES (for reference) ────────────────────────────────────────────────────
+
+# Cone: {"x": float, "y": float, "side": "left" | "right", "index": int}
+# State: {"x", "y", "yaw", "vx", "vy", "yaw_rate"}  
+# CmdFeedback: {"throttle", "steer"}        
+
+# ─── PLANNER ──────────────────────────────────────────────────────────────────
+import numpy as np
+
 def plan(cones: list[dict]) -> list[dict]:
-    """
-    Generate a path from the cone layout.
-    Called ONCE before the simulation starts.
 
-    Args:
-        cones: List of cone dicts with keys x, y, side ("left"/"right"), index
+    # separate cones
+    left_cones = [c for c in cones if c["side"] == "left"]
+    right_cones = [c for c in cones if c["side"] == "right"]
 
-    Returns:
-        path: List of waypoints [{"x": float, "y": float}, ...]
-              Ordered from start to finish.
-    
-    Tip: Try midline interpolation between matched left/right cones.
-         You can also compute a curvature-optimised racing line.
-    """
+    # sort cones by index
+    left_cones.sort(key=lambda c: c["index"])
+    right_cones.sort(key=lambda c: c["index"])
+
     path = []
-    # TODO: implement your path planning here
-    blue = np.array([[cone["x"], cone["y"]] for cone in cones if cone["side"] == "left"])
-    yellow = np.array([[cone["x"], cone["y"]] for cone in cones if cone["side"] == "right"])
 
-    # implement a planning algorithm to generate a path from the blue and yellow cones
+    # compute midpoints
+    for l, r in zip(left_cones, right_cones):
 
+        mx = (l["x"] + r["x"]) / 2
+        my = (l["y"] + r["y"]) / 2
 
-
-
-
-
-
+        path.append({"x": mx, "y": my})
 
     return path
-
